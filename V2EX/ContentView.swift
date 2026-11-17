@@ -996,6 +996,7 @@ final class BrowserModel: NSObject, ObservableObject, AVSpeechSynthesizerDelegat
         load(URL(string: "https://www.v2ex.com" + path)!)
     }
     func goBalance() { goPath("/balance") }
+    func goLogin() { goPath("/signin") }
     func reload() { webView?.reload() }
     func goBack() { webView?.goBack() }
     func backToTop() {
@@ -1322,7 +1323,6 @@ struct ContentView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             WebView(model: model)
-                .ignoresSafeArea(edges: .top)
             // Topic-page "更多" menu: keeps the bottom bar clean (7 buttons).
             if model.isTopicPage {
                 VStack {
@@ -1454,6 +1454,7 @@ struct BottomBar: View {
                 model.setDark(!model.isDark)
             }
             BarButton(icon: "arrow.up", label: "顶部") { model.backToTop() }
+            BarButton(icon: "person.crop.circle", label: "登录") { model.goLogin() }
             BarButton(icon: "gearshape", label: "设置") { showSettings = true }
         }
         .padding(.vertical, 8)

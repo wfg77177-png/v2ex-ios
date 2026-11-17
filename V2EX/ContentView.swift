@@ -9,6 +9,7 @@ import AVFoundation
 // main script never creates duplicates.
 private let v2exEarlyJS = """
 (function(){
+  if (new RegExp('^/(signin|signup|register|forgot|password|reset)').test(location.pathname)) return;
   try{
     if (localStorage.getItem('v2ex_dark') === '1') {
       var s = document.createElement('style');
@@ -41,6 +42,7 @@ private let v2exEarlyJS = """
 // querySelector, never eval.
 private let v2exJS = """
 (function(){
+  if (new RegExp('^/(signin|signup|register|forgot|password|reset)').test(location.pathname)) return;
   function store(k,v){ try{ localStorage.setItem('v2ex_'+k, v); }catch(e){} }
   function read(k,d){ try{ var v=localStorage.getItem('v2ex_'+k); return v===null?d:v; }catch(e){ return d; } }
 
@@ -1427,7 +1429,9 @@ struct WebView: UIViewRepresentable {
             // automated. The challenge page title is "Just a moment...".
             webView.evaluateJavaScript("document.title") { result, _ in
                 let title = result as? String ?? ""
-                if !title.contains("Just a moment") {
+                let path = webView.url?.path ?? ""
+                let isAuthPage = ["/signin", "/signup", "/register", "/forgot", "/password", "/reset"].contains { path == $0 || path.hasPrefix($0 + "/") }
+                if !title.contains("Just a moment") && !isAuthPage {
                     webView.evaluateJavaScript("window.__v2AutoSignIn && window.__v2AutoSignIn();", completionHandler: nil)
                 }
             }

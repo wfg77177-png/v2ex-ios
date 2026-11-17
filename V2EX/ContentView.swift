@@ -1774,15 +1774,15 @@ struct SettingsSheet: View {
                 }
                 Section("翻译设置") {
                     SecureField("BYOK Key（可选，留空用免费接口）", text: $trKey)
-                        .onChange(of: trKey) { saveTrConfig() }
+                        .onChange(of: trKey) { _ in saveTrConfig() }
                     TextField("Base URL", text: $trBase)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
-                        .onChange(of: trBase) { saveTrConfig() }
+                        .onChange(of: trBase) { _ in saveTrConfig() }
                     TextField("模型", text: $trModel)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
-                        .onChange(of: trModel) { saveTrConfig() }
+                        .onChange(of: trModel) { _ in saveTrConfig() }
                     Text("默认免费 MyMemory 接口（无需 key，每日限额）；填了 Key 后走你自己的 OpenAI 兼容接口。Key 只存在本机，不进代码仓库。")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
